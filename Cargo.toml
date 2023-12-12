@@ -1,0 +1,3 @@
+[workspace]
+members = ["aoc-cli"]
+resolver = "2"
