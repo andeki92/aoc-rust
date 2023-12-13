@@ -12,7 +12,10 @@ pub enum Template {
 impl Template {
     fn path(&self) -> PathBuf {
         match self {
-            Self::Solution => std::path::PathBuf::from("../resources/templates/solution.hbs"),
+            Self::Solution => std::path::PathBuf::from(concat!(
+                env!("CARGO_MANIFEST_DIR"),
+                "/../resources/templates/solution.hbs"
+            )),
         }
     }
 

@@ -1,4 +1,23 @@
-use std::{fs::File, io::Read};
+use std::{fs::File, io::Read, str::FromStr};
+
+pub trait ParseExt {
+    fn iter_unsigned<'a, T>(
+        &'a self,
+    ) -> Box<dyn Iterator<Item = Result<T, <T as FromStr>::Err>> + 'a>
+    where
+        T: FromStr;
+}
+
+impl ParseExt for &str {
+    fn iter_unsigned<'a, T>(
+        &'a self,
+    ) -> Box<dyn Iterator<Item = Result<T, <T as FromStr>::Err>> + 'a>
+    where
+        T: FromStr,
+    {
+        Box::new(self.split(&[' ', ',']).map(|c| c.parse::<T>()))
+    }
+}
 
 pub fn read(file_name: &str) -> String {
     let mut f = File::open(file_name).expect(&format!(

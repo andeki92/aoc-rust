@@ -1,3 +1,3 @@
 [workspace]
-members = ["aoc-cli", "aoc-utils"]
+members = ["aoc-cli", "aoc-solutions", "aoc-utils"]
 resolver = "2"

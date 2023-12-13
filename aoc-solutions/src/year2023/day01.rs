@@ -15,7 +15,7 @@ pub fn part_two(_: &InputType) -> SolutionType {
 
 #[cfg(test)]
 mod test {
-    use crate::year{{year}}::day{{day}}::{input, part_one, part_two};
+    use crate::year2023::day1::{input, part_one, part_two};
 
     const EXAMPLE: &str = r"";
 

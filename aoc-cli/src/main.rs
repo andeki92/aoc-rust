@@ -19,7 +19,6 @@ fn run_setup(paths: PathConfig, solution_template: Option<&str>) -> Result<(), B
                 .expect("Unable to write data to solution file");
         }
     }
-    paths.example_file.create()?;
     paths.input_file.create()?;
 
     Ok(())
