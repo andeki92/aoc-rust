@@ -23,6 +23,11 @@ macro_rules! solution {
             ]),
             callback: |raw_input: &str| {
                 use $year::$day::*;
+
+                if raw_input.is_empty() {
+                    panic!("Input is empty - did you forget to add your puzzle input?")
+                }
+
                 let input = input(raw_input);
                 let part_one = part_one(&input).to_string();
                 let part_two = part_two(&input).to_string();
