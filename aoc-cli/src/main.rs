@@ -33,7 +33,10 @@ fn main() -> Result<(), Box<dyn Error>> {
             day,
             template,
         } => {
-            let template_output = template.render(TemplateData::Solution { year, day });
+            let template_output = template.render(TemplateData::Solution {
+                year: year.to_string(),
+                day: format!("{day:02}"),
+            });
             run_setup(PathConfig::from(year, day), Some(&template_output))?;
         }
     }
