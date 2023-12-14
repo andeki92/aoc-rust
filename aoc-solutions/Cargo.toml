@@ -7,3 +7,10 @@ edition = "2021"
 
 [dependencies]
 aoc-utils = { path = "../aoc-utils" }
+
+[dev-dependencies]
+criterion = { version = "0.5.1", features = ["html_reports"] }
+
+[[bench]]
+name = "benchmark"
+harness = false
