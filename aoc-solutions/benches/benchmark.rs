@@ -44,7 +44,12 @@ macro_rules! benchmark {
 }
 
 fn benchmarks_2023() -> Vec<Benchmark> {
-    [benchmark!(year2023, day01), benchmark!(year2023, day02)].to_vec()
+    [
+        benchmark!(year2023, day01),
+        benchmark!(year2023, day02),
+        benchmark!(year2023, day03),
+    ]
+    .to_vec()
 }
 
 fn benchmark_wrapper(c: &mut Criterion) {

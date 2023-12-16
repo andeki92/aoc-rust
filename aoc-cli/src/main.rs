@@ -34,8 +34,9 @@ fn main() -> Result<(), Box<dyn Error>> {
             template,
         } => {
             let template_output = template.render(TemplateData::Solution {
-                year: year.to_string(),
-                day: format!("{day:02}"),
+                year: year,
+                day: day,
+                day_formatted: format!("{day:02}"),
             });
             run_setup(PathConfig::from(year, day), Some(&template_output))?;
         }

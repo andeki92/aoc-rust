@@ -40,7 +40,11 @@ impl Template {
 #[derive(Serialize, Debug)]
 #[serde(untagged)]
 pub enum TemplateData {
-    Solution { year: String, day: String },
+    Solution {
+        year: u16,
+        day: u8,
+        day_formatted: String,
+    },
 }
 
 impl std::fmt::Display for Template {
