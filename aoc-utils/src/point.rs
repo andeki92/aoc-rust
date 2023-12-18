@@ -18,18 +18,6 @@ impl Point {
     }
 }
 
-impl From<(i32, i32)> for Point {
-    fn from((x, y): (i32, i32)) -> Self {
-        Point::new(x as i64, y as i64)
-    }
-}
-
-impl From<(usize, usize)> for Point {
-    fn from((x, y): (usize, usize)) -> Self {
-        Point::new(x as i64, y as i64)
-    }
-}
-
 impl Add for Point {
     type Output = Self;
 
@@ -87,20 +75,36 @@ impl Point {
     }
 }
 
+/// Automatically generate from tuple implementation traits
+macro_rules! to_point {
+    ($($t:ty)*) => ($(
+        impl From<($t, $t)> for Point {
+            fn from((x, y): ($t, $t)) -> Self {
+                Point {
+                    x: x as i64,
+                    y: y as i64,
+                }
+            }
+        }
+    )*)
+}
+
+to_point!(u8 u16 u32 usize i8 i16 i32 i64);
+
 #[cfg(test)]
 mod test {
-    use crate::point::Point;
+    use crate::point::{Point, ORIGIN};
 
     #[test]
     fn add_point_test() {
-        assert_eq!(Point::new(0, 3), Point::new(0, 1) + Point::new(0, 2));
-        assert_eq!(Point::new(-1, -4), Point::new(0, 0) + Point::new(-1, -4));
+        assert_eq!(Point::new(0, 2), ORIGIN + Point::new(0, 2));
+        assert_eq!(Point::new(-1, -4), ORIGIN + Point::new(-1, -4));
     }
 
     #[test]
     fn sub_point_test() {
-        assert_eq!(Point::new(0, -1), Point::new(0, 1) - Point::new(0, 2));
-        assert_eq!(Point::new(1, 4), Point::new(0, 0) - Point::new(-1, -4));
+        assert_eq!(Point::new(0, -2), ORIGIN - Point::from((0, 2)));
+        assert_eq!(Point::new(1, 4), ORIGIN - Point::from((-1, -4)));
     }
 
     #[test]
@@ -114,10 +118,10 @@ mod test {
                 Point::new(2, 1),
                 Point::new(0, 2),
                 Point::new(1, 2),
-                Point::new(2, 2)
+                Point::from((2, 2))
             ]
             .sort(),
-            Point::new(1, 1).neighbours().sort()
+            Point::from((1, 1)).neighbours().sort()
         )
     }
 
