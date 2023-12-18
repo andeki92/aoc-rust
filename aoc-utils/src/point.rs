@@ -2,18 +2,31 @@ use std::ops::{Add, AddAssign, Mul, Sub};
 
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Hash, PartialOrd, Ord)]
 pub struct Point {
-    pub x: i32,
-    pub y: i32,
+    pub x: i64,
+    pub y: i64,
 }
 
+pub const ORIGIN: Point = Point::new(0, 0);
 pub const UP: Point = Point::new(0, -1);
 pub const DOWN: Point = Point::new(0, 1);
 pub const LEFT: Point = Point::new(-1, 0);
 pub const RIGHT: Point = Point::new(1, 0);
 
 impl Point {
-    pub const fn new(x: i32, y: i32) -> Self {
+    pub const fn new(x: i64, y: i64) -> Self {
         Point { x, y }
+    }
+}
+
+impl From<(i32, i32)> for Point {
+    fn from((x, y): (i32, i32)) -> Self {
+        Point::new(x as i64, y as i64)
+    }
+}
+
+impl From<(usize, usize)> for Point {
+    fn from((x, y): (usize, usize)) -> Self {
+        Point::new(x as i64, y as i64)
     }
 }
 
@@ -44,7 +57,7 @@ impl Mul<usize> for Point {
     type Output = Self;
 
     fn mul(self, rhs: usize) -> Self {
-        Point::new(self.x * rhs as i32, self.y * rhs as i32)
+        Point::new(self.x * rhs as i64, self.y * rhs as i64)
     }
 }
 
@@ -63,6 +76,14 @@ impl Point {
     }
     pub fn cardinal(self) -> [Point; 4] {
         [self + UP, self + RIGHT, self + DOWN, self + LEFT]
+    }
+
+    pub fn determinant(self, other: Self) -> i64 {
+        self.x * other.y - self.y * other.x
+    }
+
+    pub fn manhattan(self, other: Self) -> i64 {
+        (self.x - other.x).abs() + (self.y - other.y).abs()
     }
 }
 

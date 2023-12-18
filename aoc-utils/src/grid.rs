@@ -3,8 +3,8 @@ use std::ops::Index;
 use crate::point::Point;
 
 pub struct Grid<T> {
-    pub width: i32, // to remain consistent with point
-    pub height: i32,
+    pub width: i64, // to remain consistent with point
+    pub height: i64,
     pub data: Vec<T>,
 }
 
@@ -19,8 +19,8 @@ impl Grid<i64> {
             })
             .collect::<Vec<_>>();
 
-        let width = raw[0].len() as i32;
-        let height = raw.len() as i32;
+        let width = raw[0].len() as i64;
+        let height = raw.len() as i64;
         let data = raw
             .iter()
             .flatten()

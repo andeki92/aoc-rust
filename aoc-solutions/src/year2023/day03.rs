@@ -28,13 +28,13 @@ pub fn input(raw: &str) -> Schematic {
                 if !num.is_empty() {
                     let parsed_num = num.iter().collect::<String>().parse::<usize>().unwrap();
                     for offset in 1..=num.len() {
-                        numbers_lookup.insert(Point::new(x - offset as i32, y as i32), parsed_num);
+                        numbers_lookup.insert(Point::from((x - offset, y)), parsed_num);
                     }
                     num.clear()
                 }
 
                 if !next.is_ascii_digit() && next != '.' {
-                    symbols.push((next, Point::new(x as i32, y as i32)))
+                    symbols.push((next, Point::from((x, y))))
                 }
             }
             x += 1;
@@ -44,7 +44,7 @@ pub fn input(raw: &str) -> Schematic {
         if !num.is_empty() {
             let parsed_num = num.iter().collect::<String>().parse::<usize>().unwrap();
             for offset in 1..=num.len() {
-                numbers_lookup.insert(Point::new(x - offset as i32, y as i32), parsed_num);
+                numbers_lookup.insert(Point::from((x - offset, y)), parsed_num);
             }
         }
     }
