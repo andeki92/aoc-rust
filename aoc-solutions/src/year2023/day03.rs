@@ -2,7 +2,7 @@
 
 use std::collections::{HashMap, HashSet};
 
-use utils::point::{Point, PointExt};
+use utils::point::Point;
 
 type SolutionType = usize;
 

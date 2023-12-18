@@ -1,10 +1,15 @@
-use std::ops::Add;
+use std::ops::{Add, AddAssign, Mul, Sub};
 
-#[derive(Copy, Clone, Debug, Eq, PartialEq, Hash)]
+#[derive(Copy, Clone, Debug, Eq, PartialEq, Hash, PartialOrd, Ord)]
 pub struct Point {
     pub x: i32,
     pub y: i32,
 }
+
+pub const UP: Point = Point::new(0, -1);
+pub const DOWN: Point = Point::new(0, 1);
+pub const LEFT: Point = Point::new(-1, 0);
+pub const RIGHT: Point = Point::new(1, 0);
 
 impl Point {
     pub const fn new(x: i32, y: i32) -> Self {
@@ -15,52 +20,66 @@ impl Point {
 impl Add for Point {
     type Output = Self;
 
-    fn add(self, other: Self) -> Self {
-        Point::new(self.x + other.x, self.y + other.y)
+    fn add(self, rhs: Self) -> Self {
+        Point::new(self.x + rhs.x, self.y + rhs.y)
     }
 }
 
-pub trait PointExt {
-    fn neighbours(self) -> [Self; 8]
-    where
-        Self: Sized;
+impl Sub for Point {
+    type Output = Self;
 
-    fn cardinal_neighbours(self) -> [Self; 4]
-    where
-        Self: Sized;
+    fn sub(self, rhs: Self) -> Self {
+        Point::new(self.x - rhs.x, self.y - rhs.y)
+    }
 }
 
-impl PointExt for Point {
-    fn neighbours(self) -> [Point; 8] {
+impl AddAssign for Point {
+    fn add_assign(&mut self, rhs: Self) {
+        self.x += rhs.x;
+        self.y += rhs.y;
+    }
+}
+
+impl Mul<usize> for Point {
+    type Output = Self;
+
+    fn mul(self, rhs: usize) -> Self {
+        Point::new(self.x * rhs as i32, self.y * rhs as i32)
+    }
+}
+
+impl Point {
+    pub fn neighbours(self) -> [Point; 8] {
         [
+            self + UP,
+            self + RIGHT,
+            self + DOWN,
+            self + LEFT,
             self + Point::new(-1, -1), // north-west
-            self + Point::new(0, -1),  // north
             self + Point::new(1, -1),  // north-east
-            self + Point::new(-1, 0),  // west
-            self + Point::new(1, 0),   // east
             self + Point::new(-1, 1),  // south-west
-            self + Point::new(0, 1),   // south
             self + Point::new(1, 1),   // south-east
         ]
     }
-    fn cardinal_neighbours(self) -> [Point; 4] {
-        [
-            self + Point::new(0, -1), // north
-            self + Point::new(1, 0),  // east
-            self + Point::new(0, 1),  // south
-            self + Point::new(-1, 0), // west
-        ]
+    pub fn cardinal(self) -> [Point; 4] {
+        [self + UP, self + RIGHT, self + DOWN, self + LEFT]
     }
 }
 
 #[cfg(test)]
 mod test {
-    use crate::point::{Point, PointExt};
+    use crate::point::Point;
 
     #[test]
     fn add_point_test() {
         assert_eq!(Point::new(0, 3), Point::new(0, 1) + Point::new(0, 2));
         assert_eq!(Point::new(-1, -4), Point::new(0, 0) + Point::new(-1, -4));
+    }
+
+    #[test]
+    fn sub_point_test() {
+        assert_eq!(Point::new(0, -1), Point::new(0, 1) - Point::new(0, 2));
+        assert_eq!(Point::new(1, 4), Point::new(0, 0) - Point::new(-1, -4));
     }
 
     #[test]
@@ -75,13 +94,14 @@ mod test {
                 Point::new(0, 2),
                 Point::new(1, 2),
                 Point::new(2, 2)
-            ],
-            Point::new(1, 1).neighbours()
+            ]
+            .sort(),
+            Point::new(1, 1).neighbours().sort()
         )
     }
 
     #[test]
-    fn cardinal_neighboursneighbour_test() {
+    fn cardinal_test() {
         assert_eq!(
             [
                 Point::new(-3, 3),
@@ -89,7 +109,7 @@ mod test {
                 Point::new(-3, 5),
                 Point::new(-4, 4),
             ],
-            Point::new(-3, 4).cardinal_neighbours()
+            Point::new(-3, 4).cardinal()
         )
     }
 }
