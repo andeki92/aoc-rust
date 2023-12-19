@@ -50,6 +50,7 @@ fn benchmarks_2023() -> Vec<Benchmark> {
         benchmark!(year2023, day03),
         benchmark!(year2023, day17),
         benchmark!(year2023, day18),
+        benchmark!(year2023, day19),
     ]
     .to_vec()
 }
