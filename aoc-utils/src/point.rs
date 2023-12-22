@@ -1,3 +1,4 @@
+use core::fmt;
 use std::ops::{Add, AddAssign, Mul, Sub};
 
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Hash, PartialOrd, Ord)]
@@ -15,6 +16,12 @@ pub const RIGHT: Point = Point::new(1, 0);
 impl Point {
     pub const fn new(x: i64, y: i64) -> Self {
         Point { x, y }
+    }
+}
+
+impl fmt::Display for Point {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "({}, {})", self.x, self.y)
     }
 }
 
