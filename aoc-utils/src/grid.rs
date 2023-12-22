@@ -35,6 +35,29 @@ impl Grid<i64> {
     }
 }
 
+impl Grid<char> {
+    pub fn parse_char(input: &str) -> Self {
+        let raw = input
+            .lines()
+            .map(|line| line.chars().collect::<Vec<_>>())
+            .collect::<Vec<_>>();
+
+        let width = raw[0].len() as i64;
+        let height = raw.len() as i64;
+        let data = raw
+            .iter()
+            .flatten()
+            .map(|e| e.to_owned())
+            .collect::<Vec<_>>();
+
+        Grid {
+            width,
+            height,
+            data,
+        }
+    }
+}
+
 impl<T: Copy + PartialEq> Grid<T> {
     pub fn contains(&self, point: Point) -> bool {
         point.x >= 0 && point.x < self.width && point.y >= 0 && point.y < self.height
@@ -47,6 +70,16 @@ impl<T: Copy + PartialEq> Grid<T> {
             .filter(|&p| self.contains(*p))
             .map(|&p| (p, self[p]))
             .collect::<Vec<_>>()
+    }
+
+    /**
+     * Returns the coordinate of the first match
+     */
+    pub fn find(&self, needle: T) -> Option<Point> {
+        self.data
+            .iter()
+            .position(|&d| d == needle)
+            .map(|index| Point::new(index as i64 % self.width, index as i64 / self.width))
     }
 }
 
